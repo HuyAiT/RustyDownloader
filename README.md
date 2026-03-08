@@ -6,7 +6,6 @@ A fast, lightweight download manager built with Rust and Tauri.
 
 - **Multi-segment parallel downloading** — up to 16 segments with HTTP Range requests
 - **HLS/M3U8 video stream downloading** — captures and downloads streaming videos
-- **Google Drive support** — auto-handles virus scan confirmation pages
 - **Browser extension integration** — intercept downloads from your browser with cookie forwarding
 - **Pause / Resume / Retry** — with exponential backoff retry on failure
 - **Queue management** — configurable max concurrent downloads
