@@ -62,6 +62,7 @@ pub fn run() {
             commands::check_ffmpeg,
             commands::convert_to_mp4,
             commands::get_api_token,
+            commands::regenerate_api_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

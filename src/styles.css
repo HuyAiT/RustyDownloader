@@ -966,6 +966,18 @@ body {
   flex: 1;
 }
 
+.token-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.token-masked {
+  color: #6E5A46;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
 .file-info {
   background: var(--bg-tertiary);
   border-radius: var(--radius-md);

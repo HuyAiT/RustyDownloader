@@ -228,10 +228,17 @@
 
         <!-- API Token for Extension -->
         <div class="form-group">
-          <label for="settings-api-token">Extension API Token</label>
-          <div class="input-with-btn">
-            <input type="text" id="settings-api-token" readonly />
-            <button class="btn btn-outline btn-sm" id="btn-copy-token" type="button">Copy</button>
+          <label>Extension API Token</label>
+          <div class="token-status" id="token-status">
+            <span class="token-masked">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span>
+            <button class="btn btn-outline btn-sm" id="btn-regenerate-token" type="button">Regenerate</button>
+          </div>
+          <div class="token-reveal" id="token-reveal" style="display:none;">
+            <div class="input-with-btn">
+              <input type="text" id="settings-api-token" readonly />
+              <button class="btn btn-outline btn-sm" id="btn-copy-token" type="button">Copy</button>
+            </div>
+            <span class="category-rules-hint" style="color:#C45A3C;">Copy now! This token will be hidden when you close Settings.</span>
           </div>
           <span class="category-rules-hint">Paste this token into the browser extension to authenticate.</span>
         </div>

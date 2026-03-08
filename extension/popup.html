@@ -710,6 +710,61 @@
         .port-input:focus {
             border-color: #C7923E;
         }
+
+        .token-field {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .token-configured {
+            font-size: 11px;
+            color: #6B9E5E;
+            font-weight: 500;
+        }
+
+        .token-not-set {
+            font-size: 11px;
+            color: #C45A3C;
+            font-weight: 500;
+        }
+
+        .token-action-btn {
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 500;
+            font-family: inherit;
+            background: #4A3928;
+            border: 1px solid rgba(227, 200, 168, 0.15);
+            border-radius: 5px;
+            color: #C4A882;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .token-action-btn:hover {
+            color: #C7923E;
+            border-color: rgba(199, 146, 62, 0.3);
+        }
+
+        .token-save-btn {
+            background: rgba(107, 158, 94, 0.15);
+            color: #6B9E5E;
+            border-color: rgba(107, 158, 94, 0.25);
+        }
+
+        .token-save-btn:hover {
+            background: rgba(107, 158, 94, 0.25);
+            color: #6B9E5E;
+        }
+
+        .settings-hint {
+            display: block;
+            font-size: 10px;
+            color: #6E5A46;
+            margin-top: 8px;
+            padding: 0 2px;
+        }
     </style>
 </head>
 
@@ -752,6 +807,14 @@
             Media Scanner
             <span class="tab-badge" id="media-count" style="display:none">0</span>
         </button>
+        <button class="tab-btn" data-tab="settings">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+            Settings
+        </button>
     </div>
 
     <!-- Quick Download Tab -->
@@ -771,14 +834,6 @@
                     <input type="checkbox" id="toggle-intercept" />
                     <span class="toggle-slider"></span>
                 </label>
-            </div>
-            <div class="port-row">
-                <span class="toggle-label">API Port</span>
-                <input type="number" class="port-input" id="port-input" value="7890" min="1" max="65535" />
-            </div>
-            <div class="port-row">
-                <span class="toggle-label">API Token</span>
-                <input type="text" class="port-input" id="token-input" style="width:160px;font-size:11px;" placeholder="Paste token here" />
             </div>
         </div>
     </div>
@@ -845,6 +900,32 @@
             <h3>No media found</h3>
             <p>Play a video or audio on this page, then click re-scan</p>
         </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div class="tab-content" id="tab-settings">
+        <div class="section-title">Connection</div>
+        <div class="port-row">
+            <span class="toggle-label">API Port</span>
+            <input type="number" class="port-input" id="port-input" value="7890" min="1" max="65535" />
+        </div>
+        <div class="port-row" id="token-status-row">
+            <span class="toggle-label">API Token</span>
+            <div class="token-field">
+                <span class="token-configured" id="token-configured" style="display:none;">Configured</span>
+                <span class="token-not-set" id="token-not-set">Not set</span>
+                <button class="token-action-btn" id="btn-change-token" type="button">Change</button>
+            </div>
+        </div>
+        <div class="port-row" id="token-input-row" style="display:none;">
+            <span class="toggle-label">New Token</span>
+            <div class="token-field">
+                <input type="password" class="port-input" id="token-input" style="width:120px;font-size:11px;" placeholder="Paste token" />
+                <button class="token-action-btn token-save-btn" id="btn-save-token" type="button">Save</button>
+                <button class="token-action-btn" id="btn-cancel-token" type="button">Cancel</button>
+            </div>
+        </div>
+        <span class="settings-hint">Generate the token from RustyDownloader app &gt; Settings &gt; Regenerate</span>
     </div>
 
     <script src="popup.js"></script>

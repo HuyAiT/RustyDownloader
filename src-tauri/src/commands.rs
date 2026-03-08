@@ -225,6 +225,19 @@ pub async fn get_api_token(
 }
 
 #[tauri::command]
+pub async fn regenerate_api_token(
+    manager: State<'_, Arc<DownloadManager>>,
+) -> Result<String, String> {
+    let new_token = uuid::Uuid::new_v4().to_string();
+    {
+        let mut settings = manager.settings.lock().await;
+        settings.api_token = new_token.clone();
+    }
+    manager.save_settings().await;
+    Ok(new_token)
+}
+
+#[tauri::command]
 pub async fn check_ffmpeg() -> Result<bool, String> {
     match tokio::process::Command::new("ffmpeg")
         .arg("-version")

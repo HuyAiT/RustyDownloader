@@ -572,12 +572,11 @@ btnSettings.addEventListener('click', async () => {
     categoryRules = settings.category_rules || [];
     renderCategoryRules();
 
-    // Load API token
-    try {
-      const token = await invoke('get_api_token');
-      const tokenInput = document.getElementById('settings-api-token');
-      if (tokenInput) tokenInput.value = token || '';
-    } catch (_) {}
+    // Token is always hidden on open
+    const tokenReveal = document.getElementById('token-reveal');
+    const tokenStatus = document.getElementById('token-status');
+    if (tokenReveal) tokenReveal.style.display = 'none';
+    if (tokenStatus) tokenStatus.style.display = 'flex';
 
     modalSettings.style.display = 'flex';
   } catch (e) {
@@ -688,6 +687,24 @@ btnAddRule.addEventListener('click', () => {
     rows[rows.length - 1].querySelector('.rule-name').focus();
   }
 });
+
+// Regenerate API token button
+const btnRegenerateToken = document.getElementById('btn-regenerate-token');
+if (btnRegenerateToken) {
+  btnRegenerateToken.addEventListener('click', async () => {
+    try {
+      const newToken = await invoke('regenerate_api_token');
+      const tokenInput = document.getElementById('settings-api-token');
+      const tokenReveal = document.getElementById('token-reveal');
+      const tokenStatus = document.getElementById('token-status');
+      if (tokenInput) tokenInput.value = newToken;
+      if (tokenReveal) tokenReveal.style.display = 'block';
+      if (tokenStatus) tokenStatus.style.display = 'none';
+    } catch (e) {
+      console.error('Regenerate token error:', e);
+    }
+  });
+}
 
 // Copy API token button
 const btnCopyToken = document.getElementById('btn-copy-token');

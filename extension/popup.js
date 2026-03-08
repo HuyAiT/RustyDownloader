@@ -12,6 +12,7 @@ const toggleIntercept = document.getElementById('toggle-intercept');
 const tabBtns = document.querySelectorAll('.tab-btn');
 const tabQuick = document.getElementById('tab-quick');
 const tabScanner = document.getElementById('tab-scanner');
+const tabSettings = document.getElementById('tab-settings');
 
 // Scanner
 const mediaList = document.getElementById('media-list');
@@ -41,6 +42,7 @@ tabBtns.forEach(btn => {
         const tab = btn.dataset.tab;
         tabQuick.classList.toggle('active', tab === 'quick');
         tabScanner.classList.toggle('active', tab === 'scanner');
+        tabSettings.classList.toggle('active', tab === 'settings');
 
         if (tab === 'scanner') {
             loadMedia();
@@ -416,16 +418,47 @@ portInput.addEventListener('change', () => {
 
 // ---- API Token Config ----
 const tokenInput = document.getElementById('token-input');
+const tokenConfigured = document.getElementById('token-configured');
+const tokenNotSet = document.getElementById('token-not-set');
+const tokenStatusRow = document.getElementById('token-status-row');
+const tokenInputRow = document.getElementById('token-input-row');
+const btnChangeToken = document.getElementById('btn-change-token');
+const btnSaveToken = document.getElementById('btn-save-token');
+const btnCancelToken = document.getElementById('btn-cancel-token');
 
 chrome.runtime.sendMessage({ type: 'get-token' }, (response) => {
     if (response && response.token) {
-        tokenInput.value = response.token;
+        tokenConfigured.style.display = 'inline';
+        tokenNotSet.style.display = 'none';
+    } else {
+        tokenConfigured.style.display = 'none';
+        tokenNotSet.style.display = 'inline';
     }
 });
 
-tokenInput.addEventListener('change', () => {
+btnChangeToken.addEventListener('click', () => {
+    tokenStatusRow.style.display = 'none';
+    tokenInputRow.style.display = 'flex';
+    tokenInput.value = '';
+    tokenInput.focus();
+});
+
+btnSaveToken.addEventListener('click', () => {
     const token = tokenInput.value.trim();
+    if (!token) return;
     chrome.runtime.sendMessage({ type: 'set-token', value: token });
+    tokenInput.value = '';
+    tokenInputRow.style.display = 'none';
+    tokenStatusRow.style.display = 'flex';
+    tokenConfigured.style.display = 'inline';
+    tokenNotSet.style.display = 'none';
+    checkStatus();
+});
+
+btnCancelToken.addEventListener('click', () => {
+    tokenInput.value = '';
+    tokenInputRow.style.display = 'none';
+    tokenStatusRow.style.display = 'flex';
 });
 
 // ---- Init ----
