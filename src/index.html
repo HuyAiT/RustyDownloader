@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RustyDownloader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div id="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#C7923E" />
+            <path d="M16 8v10m0 0l-4-4m4 4l4-4M10 22h12" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <span class="logo-text">RustyDownloader</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-filter="all" id="nav-all">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          <span>All Downloads</span>
+          <span class="badge" id="badge-all">0</span>
+        </button>
+        <button class="nav-item" data-filter="downloading" id="nav-downloading">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <span>Downloading</span>
+          <span class="badge" id="badge-downloading">0</span>
+        </button>
+        <button class="nav-item" data-filter="completed" id="nav-completed">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+          <span>Completed</span>
+          <span class="badge" id="badge-completed">0</span>
+        </button>
+        <button class="nav-item" data-filter="failed" id="nav-failed">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="15" y1="9" x2="9" y2="15" />
+            <line x1="9" y1="9" x2="15" y2="15" />
+          </svg>
+          <span>Failed</span>
+          <span class="badge" id="badge-failed">0</span>
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="nav-item" id="btn-settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+          <span>Settings</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Toolbar -->
+      <header class="toolbar">
+        <div class="toolbar-primary">
+          <div>
+            <h1 class="page-title" id="page-title">All Downloads</h1>
+            <p class="page-subtitle" id="page-subtitle">Track, search, and manage your download history in one compact
+              view.</p>
+          </div>
+        </div>
+        <div class="toolbar-actions">
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-downloads" placeholder="Search downloaded files, extension, or status..."
+              autocomplete="off" />
+            <button class="search-clear" id="search-clear" type="button" title="Clear search"
+              aria-label="Clear search">×</button>
+          </div>
+          <button class="btn btn-primary" id="btn-add-download">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span>New Download</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="downloads-overview" id="downloads-overview">
+        <div class="overview-card">
+          <span class="overview-label">Visible</span>
+          <strong class="overview-value" id="visible-count">0</strong>
+        </div>
+        <div class="overview-card">
+          <span class="overview-label">Active</span>
+          <strong class="overview-value" id="active-count">0</strong>
+        </div>
+        <div class="overview-card">
+          <span class="overview-label">Completed</span>
+          <strong class="overview-value" id="completed-count">0</strong>
+        </div>
+        <div class="overview-card">
+          <span class="overview-label">Search</span>
+          <strong class="overview-value overview-search" id="search-state">All files</strong>
+        </div>
+      </section>
+
+      <!-- Download List -->
+      <div class="download-list" id="download-list">
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+            stroke-linecap="round" stroke-linejoin="round" opacity="0.3">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <h3>No downloads yet</h3>
+          <p>Click "New Download" to start downloading files</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Download Modal -->
+  <div class="modal-overlay" id="modal-add" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>New Download</h2>
+        <button class="modal-close" id="modal-add-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="input-url">URL</label>
+          <input type="text" id="input-url" placeholder="https://example.com/file.zip" autocomplete="off" />
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="input-filename">Filename</label>
+            <input type="text" id="input-filename" placeholder="Auto-detect from URL" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="input-savepath">Save to</label>
+          <div class="input-with-btn">
+            <input type="text" id="input-savepath" placeholder="Download directory" readonly />
+            <button class="btn btn-outline btn-sm" id="btn-browse">Browse</button>
+          </div>
+        </div>
+        <div class="file-info" id="file-info" style="display:none;">
+          <div class="info-row"><span class="info-label">Size:</span> <span id="info-size">-</span></div>
+          <div class="info-row"><span class="info-label">Type:</span> <span id="info-type">-</span></div>
+          <div class="info-row"><span class="info-label">Resumable:</span> <span id="info-resumable">-</span></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="btn-cancel-add">Cancel</button>
+        <button class="btn btn-primary" id="btn-start-download">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="modal-settings" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button class="modal-close" id="modal-settings-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="settings-dir">Default Download Directory</label>
+          <div class="input-with-btn">
+            <input type="text" id="settings-dir" readonly />
+            <button class="btn btn-outline btn-sm" id="btn-browse-settings">Browse</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="settings-concurrent">Max Concurrent Downloads</label>
+            <input type="number" id="settings-concurrent" min="1" max="10" value="3" />
+          </div>
+          <div class="form-group flex-1">
+            <label for="settings-segments">Max Segments per File</label>
+            <input type="number" id="settings-segments" min="1" max="16" value="8" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="settings-retries">Max Auto Retries on Failure</label>
+          <input type="number" id="settings-retries" min="0" max="20" value="3" />
+        </div>
+
+        <!-- API Token for Extension -->
+        <div class="form-group">
+          <label for="settings-api-token">Extension API Token</label>
+          <div class="input-with-btn">
+            <input type="text" id="settings-api-token" readonly />
+            <button class="btn btn-outline btn-sm" id="btn-copy-token" type="button">Copy</button>
+          </div>
+          <span class="category-rules-hint">Paste this token into the browser extension to authenticate.</span>
+        </div>
+
+        <!-- Category Rules Section -->
+        <div class="category-rules-section">
+          <div class="category-rules-header">
+            <label>Category Rules</label>
+            <span class="category-rules-hint">Files auto-sorted to subfolders by extension</span>
+          </div>
+          <div class="category-rules-list" id="category-rules-list">
+            <!-- Populated by JS -->
+          </div>
+          <button class="btn btn-outline btn-sm" id="btn-add-rule" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Rule
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="btn-cancel-settings">Cancel</button>
+        <button class="btn btn-primary" id="btn-save-settings">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js" type="module"></script>
+</body>
+
+</html>

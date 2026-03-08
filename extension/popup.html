@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 380px;
+            max-height: 520px;
+            font-family: 'Segoe UI', sans-serif;
+            background: #2C2118;
+            color: #E3C8A8;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---- Header ---- */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px 10px;
+            border-bottom: 1px solid rgba(227, 200, 168, 0.1);
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            background: #C7923E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .logo-icon svg {
+            display: block;
+        }
+
+        .header-text h1 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #C7923E;
+        }
+
+        .header-text p {
+            font-size: 10px;
+            color: #9A8268;
+        }
+
+        .header-status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
+        .status-dot.online {
+            background: #6B9E5E;
+            box-shadow: 0 0 5px rgba(107, 158, 94, 0.5);
+        }
+
+        .status-dot.offline {
+            background: #C45A3C;
+            box-shadow: 0 0 5px rgba(196, 90, 60, 0.5);
+        }
+
+        .status-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-label.online {
+            color: #6B9E5E;
+        }
+
+        .status-label.offline {
+            color: #C45A3C;
+        }
+
+        /* ---- Tab Bar ---- */
+        .tab-bar {
+            display: flex;
+            border-bottom: 1px solid rgba(227, 200, 168, 0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 8px;
+            background: none;
+            border: none;
+            color: #9A8268;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .tab-btn:hover {
+            color: #C4A882;
+            background: rgba(199, 146, 62, 0.06);
+        }
+
+        .tab-btn.active {
+            color: #C7923E;
+            border-bottom-color: #C7923E;
+        }
+
+        .tab-btn .tab-badge {
+            background: #C7923E;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 1px 5px;
+            border-radius: 8px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        /* ---- Tab Content ---- */
+        .tab-content {
+            display: none;
+            padding: 12px 16px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---- Quick Download Panel ---- */
+        .section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9A8268;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .form-group input {
+            background: #4A3928;
+            border: 1px solid rgba(227, 200, 168, 0.1);
+            border-radius: 8px;
+            padding: 9px 12px;
+            color: #E3C8A8;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .form-group input:focus {
+            border-color: #C7923E;
+            box-shadow: 0 0 0 3px rgba(199, 146, 62, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #6E5A46;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 9px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-primary {
+            background: #C7923E;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #D9A352;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: #4A3928;
+            color: #6E5A46;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #3E3028;
+            border-radius: 10px;
+            margin-bottom: 6px;
+        }
+
+        .toggle-label {
+            font-size: 12px;
+            color: #C4A882;
+        }
+
+        .toggle {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .toggle input {
+            display: none;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #5A4533;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .toggle-slider::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #E3C8A8;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .toggle input:checked+.toggle-slider {
+            background: #C7923E;
+        }
+
+        .toggle input:checked+.toggle-slider::after {
+            transform: translateX(16px);
+        }
+
+        .toast {
+            display: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-top: 8px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .toast.success {
+            display: block;
+            background: rgba(107, 158, 94, 0.15);
+            color: #6B9E5E;
+        }
+
+        .toast.error {
+            display: block;
+            background: rgba(196, 90, 60, 0.15);
+            color: #C45A3C;
+        }
+
+        /* ---- Media Scanner Panel ---- */
+        .scanner-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: 500;
+            font-family: inherit;
+            background: #3E3028;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            color: #9A8268;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .filter-btn:hover {
+            color: #C4A882;
+            background: #4A3928;
+        }
+
+        .filter-btn.active {
+            color: #C7923E;
+            border-color: rgba(199, 146, 62, 0.3);
+            background: rgba(199, 146, 62, 0.1);
+        }
+
+        .scanner-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 4px;
+        }
+
+        .icon-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #3E3028;
+            border: none;
+            border-radius: 6px;
+            color: #9A8268;
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            color: #C7923E;
+            background: #4A3928;
+        }
+
+        .icon-btn svg {
+            display: block;
+        }
+
+        /* Sort dropdown */
+        .sort-wrapper {
+            position: relative;
+        }
+
+        .sort-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 4px;
+            background: #3E3028;
+            border: 1px solid rgba(227, 200, 168, 0.12);
+            border-radius: 8px;
+            z-index: 100;
+            min-width: 140px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .sort-dropdown.open {
+            display: block;
+        }
+
+        .sort-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-family: inherit;
+            background: none;
+            border: none;
+            color: #C4A882;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .sort-option:hover {
+            background: rgba(199, 146, 62, 0.1);
+        }
+
+        .sort-option.active {
+            color: #C7923E;
+        }
+
+        .sort-arrow {
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        /* ---- Media List ---- */
+        .media-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 320px;
+        }
+
+        .media-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #3E3028;
+            border-radius: 10px;
+            transition: background 0.15s;
+        }
+
+        .media-item:hover {
+            background: #4A3928;
+        }
+
+        .media-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .media-icon.video {
+            background: rgba(199, 146, 62, 0.15);
+        }
+
+        .media-icon.audio {
+            background: rgba(107, 158, 94, 0.15);
+        }
+
+        .media-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .media-name {
+            font-size: 12px;
+            font-weight: 500;
+            color: #E3C8A8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .media-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 3px;
+        }
+
+        .media-size {
+            font-size: 11px;
+            color: #9A8268;
+        }
+
+        .media-type-badge {
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 1px 5px;
+            border-radius: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        .media-type-badge.video {
+            background: rgba(199, 146, 62, 0.15);
+            color: #C7923E;
+        }
+
+        .media-type-badge.audio {
+            background: rgba(107, 158, 94, 0.15);
+            color: #6B9E5E;
+        }
+
+        .media-type-badge.hls {
+            background: rgba(147, 130, 220, 0.15);
+            color: #9382DC;
+        }
+
+        .media-type-badge.archive {
+            background: rgba(200, 160, 80, 0.15);
+            color: #C8A050;
+        }
+
+        .media-type-badge.document {
+            background: rgba(100, 160, 200, 0.15);
+            color: #64A0C8;
+        }
+
+        .media-type-badge.program {
+            background: rgba(180, 100, 100, 0.15);
+            color: #B46464;
+        }
+
+        .media-type-badge.torrent {
+            background: rgba(120, 180, 120, 0.15);
+            color: #78B478;
+        }
+
+        .media-icon.archive {
+            background: rgba(200, 160, 80, 0.15);
+        }
+
+        .media-icon.document {
+            background: rgba(100, 160, 200, 0.15);
+        }
+
+        .media-icon.program {
+            background: rgba(180, 100, 100, 0.15);
+        }
+
+        .media-icon.torrent {
+            background: rgba(120, 180, 120, 0.15);
+        }
+
+        .media-dl-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(199, 146, 62, 0.12);
+            border: none;
+            border-radius: 8px;
+            color: #C7923E;
+            cursor: pointer;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .media-dl-btn:hover {
+            background: #C7923E;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .media-dl-btn svg {
+            display: block;
+        }
+
+        /* Empty state */
+        .scanner-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 10px;
+            color: #6E5A46;
+            text-align: center;
+        }
+
+        .scanner-empty svg {
+            margin-bottom: 10px;
+            opacity: 0.3;
+        }
+
+        .scanner-empty h3 {
+            font-size: 13px;
+            font-weight: 500;
+            color: #9A8268;
+            margin-bottom: 4px;
+        }
+
+        .scanner-empty p {
+            font-size: 11px;
+        }
+
+        /* Scanning animation */
+        .scanning-spinner {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 16px;
+            color: #9A8268;
+            font-size: 12px;
+        }
+
+        .scanning-spinner.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(199, 146, 62, 0.2);
+            border-top-color: #C7923E;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Scrollbar */
+        .media-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .media-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .media-list::-webkit-scrollbar-thumb {
+            background: rgba(199, 146, 62, 0.2);
+            border-radius: 3px;
+        }
+
+        .media-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(199, 146, 62, 0.4);
+        }
+
+        .tab-content::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .tab-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .tab-content::-webkit-scrollbar-thumb {
+            background: rgba(199, 146, 62, 0.2);
+            border-radius: 3px;
+        }
+
+        .btn-download-all {
+            width: 100%;
+            padding: 7px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(199, 146, 62, 0.25);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: rgba(199, 146, 62, 0.08);
+            color: #C7923E;
+            display: none;
+        }
+
+        .btn-download-all:hover {
+            background: rgba(199, 146, 62, 0.18);
+        }
+
+        .btn-download-all.visible {
+            display: block;
+        }
+
+        .port-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: #3E3028;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            gap: 8px;
+        }
+
+        .port-input {
+            width: 70px;
+            background: #4A3928;
+            border: 1px solid rgba(227, 200, 168, 0.1);
+            border-radius: 6px;
+            padding: 5px 8px;
+            color: #E3C8A8;
+            font-size: 12px;
+            font-family: inherit;
+            outline: none;
+            text-align: center;
+            transition: border-color 0.15s;
+        }
+
+        .port-input:focus {
+            border-color: #C7923E;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v10m0 0l-4-4m4 4l4-4M6 19h12" />
+            </svg>
+        </div>
+        <div class="header-text">
+            <h1>RustyDownloader</h1>
+            <p>Browser Extension</p>
+        </div>
+        <div class="header-status">
+            <span class="status-dot offline" id="status-dot"></span>
+            <span class="status-label offline" id="status-text">Checking...</span>
+        </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+        <button class="tab-btn active" data-tab="quick">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Quick Download
+        </button>
+        <button class="tab-btn" data-tab="scanner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="23 7 16 12 23 17 23 7" />
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+            </svg>
+            Media Scanner
+            <span class="tab-badge" id="media-count" style="display:none">0</span>
+        </button>
+    </div>
+
+    <!-- Quick Download Tab -->
+    <div class="tab-content active" id="tab-quick">
+        <div class="section-title">Quick Download</div>
+        <div class="form-group">
+            <input type="text" id="url-input" placeholder="Paste URL here..." />
+        </div>
+        <button class="btn btn-primary" id="btn-download" disabled>Send to RustyDownloader</button>
+        <div class="toast" id="toast"></div>
+
+        <div style="margin-top: 12px;">
+            <div class="section-title">Options</div>
+            <div class="toggle-row">
+                <span class="toggle-label">Intercept browser downloads</span>
+                <label class="toggle">
+                    <input type="checkbox" id="toggle-intercept" />
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="port-row">
+                <span class="toggle-label">API Port</span>
+                <input type="number" class="port-input" id="port-input" value="7890" min="1" max="65535" />
+            </div>
+            <div class="port-row">
+                <span class="toggle-label">API Token</span>
+                <input type="text" class="port-input" id="token-input" style="width:160px;font-size:11px;" placeholder="Paste token here" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Media Scanner Tab -->
+    <div class="tab-content" id="tab-scanner">
+        <!-- Toolbar -->
+        <div class="scanner-toolbar">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="video">Video</button>
+            <button class="filter-btn" data-filter="audio">Audio</button>
+            <button class="filter-btn" data-filter="archive">Archive</button>
+            <button class="filter-btn" data-filter="document">Doc</button>
+            <button class="filter-btn" data-filter="program">Program</button>
+
+            <div class="scanner-actions">
+                <!-- Sort button -->
+                <div class="sort-wrapper">
+                    <button class="icon-btn" id="btn-sort" title="Sort">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="6" x2="20" y2="6" />
+                            <line x1="4" y1="12" x2="14" y2="12" />
+                            <line x1="4" y1="18" x2="8" y2="18" />
+                        </svg>
+                    </button>
+                    <div class="sort-dropdown" id="sort-dropdown">
+                        <button class="sort-option active" data-sort="name">Name <span
+                                class="sort-arrow">↑</span></button>
+                        <button class="sort-option" data-sort="size">Size <span class="sort-arrow">↑</span></button>
+                        <button class="sort-option" data-sort="type">Type <span class="sort-arrow">↑</span></button>
+                    </div>
+                </div>
+                <!-- Re-scan button -->
+                <button class="icon-btn" id="btn-rescan" title="Re-scan page">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10" />
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Scanning indicator -->
+        <div class="scanning-spinner" id="scanning-spinner">
+            <div class="spinner"></div>
+            <span>Scanning page...</span>
+        </div>
+
+        <!-- Download All -->
+        <button class="btn-download-all" id="btn-download-all">Download All</button>
+
+        <!-- Media list -->
+        <div class="media-list" id="media-list"></div>
+
+        <!-- Empty State -->
+        <div class="scanner-empty" id="scanner-empty" style="display:none;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="23 7 16 12 23 17 23 7" />
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+            </svg>
+            <h3>No media found</h3>
+            <p>Play a video or audio on this page, then click re-scan</p>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

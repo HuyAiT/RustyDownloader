@@ -1,0 +1,56 @@
+{
+    "manifest_version": 3,
+    "name": "RustyDownloader",
+    "description": "Send download links to RustyDownloader app",
+    "version": "1.2.0",
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "permissions": [
+        "contextMenus",
+        "downloads",
+        "storage",
+        "webRequest",
+        "activeTab",
+        "tabs",
+        "cookies"
+    ],
+    "host_permissions": [
+        "http://127.0.0.1/*",
+        "<all_urls>"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_start",
+            "all_frames": true
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "inject.js"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png"
+        }
+    }
+}
