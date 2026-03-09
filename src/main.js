@@ -572,6 +572,17 @@ btnSettings.addEventListener('click', async () => {
     categoryRules = settings.category_rules || [];
     renderCategoryRules();
 
+    // Load autostart state from plugin
+    const autostartCheckbox = document.getElementById('settings-autostart');
+    if (autostartCheckbox) {
+      try {
+        const enabled = await invoke('plugin:autostart|is_enabled');
+        autostartCheckbox.checked = enabled;
+      } catch (_) {
+        autostartCheckbox.checked = false;
+      }
+    }
+
     // Token is always hidden on open
     const tokenReveal = document.getElementById('token-reveal');
     const tokenStatus = document.getElementById('token-status');
@@ -611,6 +622,21 @@ btnSaveSettings.addEventListener('click', async () => {
       maxRetries: parseInt(settingsRetries?.value) || 3,
       categoryRules: categoryRules,
     });
+
+    // Update autostart via plugin
+    const autostartCheckbox = document.getElementById('settings-autostart');
+    if (autostartCheckbox) {
+      try {
+        if (autostartCheckbox.checked) {
+          await invoke('plugin:autostart|enable');
+        } else {
+          await invoke('plugin:autostart|disable');
+        }
+      } catch (e) {
+        console.error('Autostart toggle error:', e);
+      }
+    }
+
     modalSettings.style.display = 'none';
   } catch (e) {
     console.error('Save settings error:', e);

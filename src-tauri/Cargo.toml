@@ -26,3 +26,4 @@ futures-util = "0.3"
 percent-encoding = "2"
 url = "2"
 rusqlite = { version = "0.31", features = ["bundled"] }
+tauri-plugin-autostart = "2"
